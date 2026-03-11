@@ -8,6 +8,9 @@ import java.util.concurrent.atomic.AtomicBoolean;
 import RenderWindow.pixelTranslateArgs;
 import Rendering.MainEngine;
 
+/*
+ *I wrote this when I had just began java, I would not do it like this again lol. 
+ */
 public class Mandelbrot implements Runnable {
 	// task id for multithreading arg updates
 	public final long TaskID; // gonna make it public
@@ -32,6 +35,8 @@ public class Mandelbrot implements Runnable {
 	public static double parameterX = 0;
 	public static double parameterY = 0;
 
+	private static double parameter1, parameter2, parameter3, parameter4;
+
 	// ---------------------------------------------------------------------------------------------------
 	public Mandelbrot(int startX, int endX, int height, BufferedImage img) {
 		this.TaskID = (tasks++);
@@ -40,7 +45,6 @@ public class Mandelbrot implements Runnable {
 		this.endX = endX;
 
 		this.height = height;
-
 	}
 
 	// ---------------------------------------------------------------------------------------------------
@@ -49,9 +53,11 @@ public class Mandelbrot implements Runnable {
 		while (running.get()) {
 			try {
 				barrier.await();
-
+				// TODO System.out.printf("Mandelbrot %d has passed barrier\n", TaskID);
 				if (TaskID == 0)
 					pixelTranslateArgs.pixelsToComplex(getArgs()); // update sharerd x & y lists ect
+
+				var args = getArgs();
 
 				int color;
 				int survivalTime;
@@ -102,7 +108,7 @@ public class Mandelbrot implements Runnable {
 	}
 
 	public static int getColor(int iterations) {
-		double scale = (iterations / (double) MAX_ITERATIONS) * (256); // rgb
+		double scale = ((iterations * 256) / (double) MAX_ITERATIONS); // rgb
 		scale = Math.pow(scale, 0.99);
 		int color = (int) (scale * (1 << 16) + scale * (1 << 8) + scale * (1 << 0));
 		return color;

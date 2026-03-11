@@ -20,31 +20,19 @@ public class Window extends Frame {
 	public MouseHandling mouse_handler = null;
 	public KeyboardHandling key_handeler = null;
 
-	int width, height;
+	public int width, height;
+	public boolean hasDimentions = true;
 
-//------------------------------------------------------------------------------------------------------------
-	/*
-	 * Window(int width, int height, boolean fullscreen, int device){ //deprecated
-	 * super("AMAZING FRACTAL VISUALIZATIONS!!!"); this.gd =
-	 * ge.getScreenDevices()[device-1];
-	 * 
-	 * this.width = width; this.height = height; setVisible(true);
-	 * setSize(width,height);
-	 * 
-	 * addWindowListener(new WindowAdapter() {
-	 * 
-	 * @Override public void windowClosing(WindowEvent e) { System.out.println(e);
-	 * System.exit(0); } }); this.g = this.getGraphics();
-	 * 
-	 * if (fullscreen) this.gd.setFullScreenWindow(this); }
-	 */
 //------------------------------------------------------------------------------------------------------------
 	public Window(boolean fullscreen, int device) {
 		super("AMAZING FRACTAL VISUALIZATIONS!!!");
-		this.gd = ge.getScreenDevices()[device - 1];
-
-		this.width = gd.getDefaultConfiguration().getBounds().width;
-		this.height = gd.getDefaultConfiguration().getBounds().height;
+		this.gd = ge.getDefaultScreenDevice();
+		if (this.gd != null) {
+			this.width = gd.getDefaultConfiguration().getBounds().width;
+			this.height = gd.getDefaultConfiguration().getBounds().height;
+		} else {
+			hasDimentions = false;
+		}
 
 		setVisible(true);
 		setSize(width, height);
